@@ -1,0 +1,133 @@
+.vscode/
+################################################################################
+# Vivado / Vitis Git Ignore
+# Author: quang-tran
+# Purpose: Clean repo, keep only source HDL, XDC, and scripts
+################################################################################
+
+# ------------------------------------------------------------------------------
+# Vivado project build artifacts
+# ------------------------------------------------------------------------------
+*.jou
+*.log
+*.str
+*.rpx
+*.zip
+*.gz
+*.wdb
+*.xml
+*.html
+*.json
+
+# Implementation / synthesis / simulation runs
+*.runs/
+*.sim/
+*.cache/
+*.hw/
+*.ip_user_files/
+*.ip_user_files/*
+*.srcs/sources_1/ip/*
+*.srcs/sources_1/bd/*/hw_handoff/
+*.srcs/sources_1/bd/*/hdl/*
+*.gen/
+*.Xil/
+*.tmp/
+*.srcs/sim_*/ # simulation results
+*.XPR.lock
+
+# Checkpoints / temporary implementation files
+*.dcp
+*.ncd
+*.ngc
+*.ngd
+*.edf
+*.jou.*
+*.bit
+*.bin
+*.mcs
+*.prm
+*.ltx
+*.svf
+*.tcl~  # temporary
+*.backup
+*.restore
+*.ppr
+*.xdc~  # backup constraints
+
+# ------------------------------------------------------------------------------
+# Vitis / SDK artifacts
+# ------------------------------------------------------------------------------
+*.sdk/
+*.xsa
+*.xpfm
+*.metadata/
+*.launch/
+*.project/
+*.cproject/
+*.settings/
+*.build/
+*.vitis/
+*.ide/
+*.debug/
+*.log
+*.bin
+*.elf
+
+# ------------------------------------------------------------------------------
+# General OS / IDE clutter
+# ------------------------------------------------------------------------------
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# Windows
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+
+# Linux / Ubuntu
+*~
+*.swp
+*.swo
+*.tmp
+
+# VSCode / Eclipse / Vitis config
+.vscode/
+.idea/
+.metadata/
+.classpath
+.project
+.settings/
+
+# ------------------------------------------------------------------------------
+# User-specific or temporary output
+# ------------------------------------------------------------------------------
+*.out
+*.bak
+*.old
+*.lock
+*.jou
+*.wcfg
+*.cfg
+*.csv
+*.vcd
+*.wlf
+
+# ------------------------------------------------------------------------------
+# Optional: keep only source and config folders
+# ------------------------------------------------------------------------------
+!src/**
+!hdl/**
+!verilog/**
+!vhdl/**
+!constraints/**
+!xdc/**
+!scripts/**
+!tcl/**
+!doc/**
+!README.md
+!Makefile
+!*.xpr
+!*.tcl
+
