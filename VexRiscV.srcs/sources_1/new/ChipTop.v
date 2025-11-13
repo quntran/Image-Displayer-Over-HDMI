@@ -99,11 +99,11 @@ module ChipTop (
     );
 
     // ===============================================
-    // 4. Instruction Memory (ROM, 2 KB)
+    // 4. Instruction Memory (ROM, 64 KB)
     // ===============================================
     reg [31:0] instr_mem [0:511];
+    reg [31:0] data_mem [0:(300 * 300)/2 - 1];
     initial $readmemh("/home/quang-tran/project/VexRiscv/firmware.hex", instr_mem);
-
     reg [31:0] instr_data_reg;
     reg        instr_valid_reg;
 
@@ -124,25 +124,24 @@ module ChipTop (
     assign iBus_rsp_payload_inst  = instr_data_reg;
     assign iBus_rsp_payload_error = 1'b0;
 
-    // ===============================================
-    // 5. Data Memory (RAM 64 KB)
-    // ===============================================
-    localparam integer data_mem_size = (300 * 300 - 1);
-    reg [31:0] data_mem [0:data_mem_size - 1];
-    reg [31:0] dBus_rdata_reg;
+//     ===============================================
+//     5. Data Memory (RAM 64 KB)
+//     ===============================================
     
+    reg [31:0] dBus_rdata_reg;
+
     assign dBus_cmd_ready = 1'b1;
     assign dBus_rsp_ready = 1'b1; // CPU coi như nhận phản hồi ngay
     assign dBus_rsp_error = 1'b0;
     assign dBus_rsp_data  = dBus_rdata_reg;
-
+    
     always @(posedge clk_125MHz) begin
         if (dBus_cmd_valid) begin
             if (dBus_cmd_payload_wr) begin
-                if (dBus_cmd_payload_mask[0]) data_mem[dBus_cmd_payload_address[15:2]][7:0]   <= dBus_cmd_payload_data[7:0];
-                if (dBus_cmd_payload_mask[1]) data_mem[dBus_cmd_payload_address[15:2]][15:8]  <= dBus_cmd_payload_data[15:8];
-                if (dBus_cmd_payload_mask[2]) data_mem[dBus_cmd_payload_address[15:2]][23:16] <= dBus_cmd_payload_data[23:16];
-                if (dBus_cmd_payload_mask[3]) data_mem[dBus_cmd_payload_address[15:2]][31:24] <= dBus_cmd_payload_data[31:24];
+                if (dBus_cmd_payload_mask[0]) data_mem[dBus_cmd_payload_address[15:2] ][7:0]   <= dBus_cmd_payload_data[7:0];
+                if (dBus_cmd_payload_mask[1]) data_mem[dBus_cmd_payload_address[15:2] ][15:8]  <= dBus_cmd_payload_data[15:8];
+                if (dBus_cmd_payload_mask[2]) data_mem[dBus_cmd_payload_address[15:2] ][23:16] <= dBus_cmd_payload_data[23:16];
+                if (dBus_cmd_payload_mask[3]) data_mem[dBus_cmd_payload_address[15:2] ][31:24] <= dBus_cmd_payload_data[31:24];
             end else begin
                 dBus_rdata_reg <= data_mem[dBus_cmd_payload_address[15:2]];
             end
@@ -153,19 +152,17 @@ module ChipTop (
     // 6. HDMI framebuffer + output
     // ===============================================
     
-    wire clk_pix;
-    wire [16:0] fb_rd_addr;
+    wire [15:0] fb_rd_addr;
     wire [15:0] fb_rd_data;
     
-//    reg [31:0] fb_word_reg;
+    reg [31:0] word_data_reg;
+    
+    always @(posedge clk_125MHz) begin
+        word_data_reg <= data_mem[fb_rd_addr[15:1]];
+    end
+    
+    assign fb_rd_data = fb_rd_addr[0] ? word_data_reg[31:16] : word_data_reg[15:0];
 
-//    always @(posedge clk_125MHz) begin
-//        fb_word_reg <= data_mem[fb_rd_addr];
-//    end
-    
-//    assign fb_rd_data = fb_word_reg[31:27];
-    assign fb_rd_data = 16'b1111100000000000;
-    
     HDMI_Encode hdmi_en (
          .pixel(fb_rd_data),
 	     .clk(sys_clk),  // 125MHz
@@ -175,5 +172,6 @@ module ChipTop (
 	     .TMDSn_clock(hdmi_clk_n),
 	     .fb_addr(fb_rd_addr)
     );
+
 
 endmodule

@@ -30,7 +30,7 @@ module HDMI_Encode(
 	input clk,  // 125MHz
 	output [2:0] TMDSp, TMDSn,
 	output TMDSp_clock, TMDSn_clock,
-	output reg [16 : 0] fb_addr
+	output reg [15 : 0] fb_addr
 );
 
 ////////////////////////////////////////////////////////////////////////
@@ -142,7 +142,6 @@ wire clkfb_in, clkfb_out;
 // counter and sync generation
 reg [9:0] CounterX = 0, CounterY = 0;
 reg hSync, vSync, DrawArea;
-wire active_area = (CounterX < 300) && (CounterY < 300);
 always @(posedge pixclk)
     begin  
         DrawArea <= (CounterX<640) && (CounterY<480);           // define picture dimensions for 640x480 (off-screen data 800x525)
@@ -152,7 +151,7 @@ always @(posedge pixclk)
                                                                    only counts up 1 count after horizontal finishes. */                                                          
         hSync <= (CounterX>=656) && (CounterX<752);         // hsync high for 96 counts                                                 
         vSync <= (CounterY>=490) && (CounterY<492);         // vsync high for 2 counts
-        if (active_area)
+        if (CounterX < 300 && CounterY < 300)
             fb_addr <= CounterY * 300 + CounterX;
         else
             fb_addr <= 0;
