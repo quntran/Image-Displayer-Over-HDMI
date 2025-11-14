@@ -30,7 +30,7 @@ module HDMI_Encode(
 	input clk,  // 125MHz
 	output [2:0] TMDSp, TMDSn,
 	output TMDSp_clock, TMDSn_clock,
-	output reg [15 : 0] fb_addr
+	output reg [16 : 0] fb_addr
 );
 
 ////////////////////////////////////////////////////////////////////////

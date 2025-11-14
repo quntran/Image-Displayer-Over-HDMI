@@ -102,7 +102,7 @@ module ChipTop (
     // 4. Instruction Memory (ROM, 64 KB)
     // ===============================================
     reg [31:0] instr_mem [0:511];
-    reg [31:0] data_mem [0:(300 * 300)/2 - 1];
+    reg [31:0] data_mem [0:(300 * 300) - 1];
     initial $readmemh("/home/quang-tran/project/VexRiscv/firmware.hex", instr_mem);
     reg [31:0] instr_data_reg;
     reg        instr_valid_reg;
@@ -152,13 +152,13 @@ module ChipTop (
     // 6. HDMI framebuffer + output
     // ===============================================
     
-    wire [15:0] fb_rd_addr;
+    wire [16:0] fb_rd_addr;
     wire [15:0] fb_rd_data;
     
     reg [31:0] word_data_reg;
     
     always @(posedge clk_125MHz) begin
-        word_data_reg <= data_mem[fb_rd_addr[15:1]];
+        word_data_reg <= data_mem[fb_rd_addr[16:1]];
     end
     
     assign fb_rd_data = fb_rd_addr[0] ? word_data_reg[31:16] : word_data_reg[15:0];
