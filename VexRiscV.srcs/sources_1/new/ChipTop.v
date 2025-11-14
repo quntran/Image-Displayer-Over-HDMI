@@ -138,12 +138,12 @@ module ChipTop (
     always @(posedge clk_125MHz) begin
         if (dBus_cmd_valid) begin
             if (dBus_cmd_payload_wr) begin
-                if (dBus_cmd_payload_mask[0]) data_mem[dBus_cmd_payload_address[15:2] ][7:0]   <= dBus_cmd_payload_data[7:0];
-                if (dBus_cmd_payload_mask[1]) data_mem[dBus_cmd_payload_address[15:2] ][15:8]  <= dBus_cmd_payload_data[15:8];
-                if (dBus_cmd_payload_mask[2]) data_mem[dBus_cmd_payload_address[15:2] ][23:16] <= dBus_cmd_payload_data[23:16];
-                if (dBus_cmd_payload_mask[3]) data_mem[dBus_cmd_payload_address[15:2] ][31:24] <= dBus_cmd_payload_data[31:24];
+                if (dBus_cmd_payload_mask[0]) data_mem[dBus_cmd_payload_address[17:2] ][7:0]   <= dBus_cmd_payload_data[7:0];
+                if (dBus_cmd_payload_mask[1]) data_mem[dBus_cmd_payload_address[17:2] ][15:8]  <= dBus_cmd_payload_data[15:8];
+                if (dBus_cmd_payload_mask[2]) data_mem[dBus_cmd_payload_address[17:2] ][23:16] <= dBus_cmd_payload_data[23:16];
+                if (dBus_cmd_payload_mask[3]) data_mem[dBus_cmd_payload_address[17:2] ][31:24] <= dBus_cmd_payload_data[31:24];
             end else begin
-                dBus_rdata_reg <= data_mem[dBus_cmd_payload_address[15:2]];
+                dBus_rdata_reg <= data_mem[dBus_cmd_payload_address[17:2]];
             end
         end
     end
